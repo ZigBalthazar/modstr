@@ -85,7 +85,7 @@ jobs:
 
   summary:
     name: Workflow Summary
-    needs: [setup, quality, build, test, docker]
+    needs: [setup, quality, build, docker]
     runs-on: ubuntu-latest
     if: always() # Run even if previous jobs fail
     steps:
