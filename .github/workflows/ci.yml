@@ -64,7 +64,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ghcr.io/${{ github.repository.lowercase() }}
           tags: |
             type=raw,value=${{ github.sha }}
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/master' }}
@@ -82,10 +82,10 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
             type=gha,scope=${{ github.ref_name }}-${{ github.job }}
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache
+            type=registry,ref=ghcr.io/${{ github.repository.lowercase() }}:buildcache
           cache-to: |
             type=gha,mode=max,scope=${{ github.ref_name }}-${{ github.job }}
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache,mode=max
+            type=registry,ref=ghcr.io/${{ github.repository.lowercase() }}:buildcache,mode=max
 
   summary:
     name: Workflow Summary
@@ -102,18 +102,18 @@ jobs:
           echo "## 🔨 Build Information" >> $GITHUB_STEP_SUMMARY
           echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Repository** | ${{ github.repository }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Repository** | ${{ github.repository.lowercase() }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Branch/Tag** | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Commit** | [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit** | [${{ github.sha }}](https://github.com/${{ github.repository.lowercase() }}/commit/${{ github.sha }}) |" >> $GITHUB_STEP_SUMMARY
           echo "| **Triggered by** | ${{ github.event_name }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Workflow Run** | [View Details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Workflow Run** | [View Details](https://github.com/${{ github.repository.lowercase() }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
 
           if [[ "${{ needs.docker.result }}" == "success" && "${{ github.event_name }}" != "pull_request" ]]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "## 🐳 Docker Image" >> $GITHUB_STEP_SUMMARY
             echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
             echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
-            echo "| **Repository** | ghcr.io/${{ github.repository }} |" >> $GITHUB_STEP_SUMMARY
-            echo "| **Latest Tag** | ghcr.io/${{ github.repository }}:${{ github.sha }} |" >> $GITHUB_STEP_SUMMARY
-            echo "| **Package URL** | [View on GitHub](https://github.com/${{ github.repository }}/pkgs/container/$(echo '${{ github.repository }}' | cut -d'/' -f2)) |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Repository** | ghcr.io/${{ github.repository.lowercase() }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Latest Tag** | ghcr.io/${{ github.repository.lowercase() }}:${{ github.sha }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Package URL** | [View on GitHub](https://github.com/${{ github.repository.lowercase() }}/pkgs/container/$(echo '${{ github.repository.lowercase() }}' | cut -d'/' -f2)) |" >> $GITHUB_STEP_SUMMARY
           fi
