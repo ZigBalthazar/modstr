@@ -1,13 +1,13 @@
 import type { Request, RequestHandler, Response } from "express";
 import { analyzeService } from "./analyzeService";
-import { Event, verifyEvent } from "nostr-tools";
+import { type Event, verifyEvent } from "nostr-tools";
 import { ServiceResponse } from "@/common/models/serviceResponse";
 
 class AnalyzeController {
 	public analyzeEvent: RequestHandler = async (req: Request, res: Response) => {
 		const event = req.body as Event;
 
-		let isGood = verifyEvent(event);
+		const isGood = verifyEvent(event);
 		if (!isGood) {
 			res.status(400).send(ServiceResponse.failure("Invalid event format", null, 400));
 			return;

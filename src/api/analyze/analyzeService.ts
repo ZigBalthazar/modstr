@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 
 import { ServiceResponse } from "@/common/models/serviceResponse";
 import { logger } from "@/server";
-import { generateText, LanguageModelV1 } from "ai";
+import { generateText, type LanguageModelV1 } from "ai";
 import { google } from "@ai-sdk/google";
 
 function createClassificationPrompt(eventContent: string, tags: string[] = []): string {

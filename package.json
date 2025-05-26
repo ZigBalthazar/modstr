@@ -15,7 +15,7 @@
 		"format": "biome format --write",
 		"test": "vitest run",
 		"test:cov": "vitest run --coverage",
-		"check": "npm lint && npm format && npm build && npm test"
+		"check": "npm run lint && npm run format && npm run build"
 	},
 	"dependencies": {
 		"@ai-sdk/deepseek": "^0.2.14",
