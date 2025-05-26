@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "Smart Moderation for the Nostr Protocol",
 	"author": "zigbalthazar",
-	"repository": "https://github.com/ZigBalthazar/modstr.git",
+	"repository": "https://github.com/zigBalthazar/modstr.git",
 	"license": "MIT",
 	"main": "index.ts",
 	"private": false,
