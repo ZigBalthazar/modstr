@@ -109,12 +109,13 @@ To integrate Modstr with relays using [Strfry](https://github.com/hoytech/strfry
 
 ## 📚 Roadmap
 
-* [ ] Language detection integration
-* [ ] Local model support (e.g., Ollama, Llama.cpp)
-* [ ] NIP-90 data vending machine integration
-* [ ] Websocket interface integration
-* [ ] Event suggestion service (based on user following and liked events)
 * [ ] Full moderation with integration to a web of trust service
+* [ ] Local model support (e.g., Ollama, Llama.cpp)
+* [ ] Websocket interface integration
+* [ ] Language detection integration
+* [ ] NIP-90 data vending machine integration
+* [ ] Event suggestion service (based on user following and liked events)
+* [ ] Complete documentation on how to run, use, and integrate with Modstr
 
 
 ## 🤝 Contributing
