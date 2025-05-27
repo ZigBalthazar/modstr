@@ -113,6 +113,8 @@ To integrate Modstr with relays using [Strfry](https://github.com/hoytech/strfry
 * [ ] Local model support (e.g., Ollama, Llama.cpp)
 * [ ] NIP-90 data vending machine integration
 * [ ] Websocket interface integration
+* [ ] Event suggestion service (based on user following and liked events)
+* [ ] Full moderation with integration to a web of trust service
 
 
 ## 🤝 Contributing

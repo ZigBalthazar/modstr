@@ -1,19 +1,24 @@
-import { ClassificationLabel, ClassificationStatus } from "./enums";
+import {
+  BlobClassificationLabel,
+  BlobClassificationStatus,
+  EventClassificationLabel,
+  EventClassificationStatus,
+} from "./enums";
 
-export function createClassificationPrompt(eventContent: string): string {
-	return `
+export function eventClassificationPrompt(): string {
+  return `
 You are an AI classifier for Nostr events. Your task is to analyze the following event and return:
 
 1. A "status" from this fixed list:
 
-${Object.values(ClassificationStatus)
-	.map((status) => `"${status}"`)
-	.join(",\n\t")}
+${Object.values(EventClassificationStatus)
+  .map((status) => `"${status}"`)
+  .join(",\n\t")}
 
 2. One or more "labels" from this fixed list:
-${Object.values(ClassificationLabel)
-	.map((label) => `"${label}"`)
-	.join(",\n\t")}
+${Object.values(EventClassificationLabel)
+  .map((label) => `"${label}"`)
+  .join(",\n\t")}
 
 3. A short explanation in "reason".
 
@@ -29,10 +34,35 @@ Analyze the event for:
 
 
 Be strict, consistent, and assume your response will trigger moderation or alerting mechanisms.
+`.trim();
+}
 
-Event Text:
-\`\`\`
-${eventContent}
-\`\`\`
+export function mediaAnalysisPrompt(): string {
+  return `
+You are a media classification AI. Your task is to analyze a media item (image, video, or audio) and return:
+
+1. A "status" from this fixed list:
+
+${Object.values(BlobClassificationStatus)
+  .map((status) => `"${status}"`)
+  .join(",\n\t")}
+
+2. One or more "labels" from this fixed list:
+${Object.values(BlobClassificationLabel)
+  .map((label) => `"${label}"`)
+  .join(",\n\t")}
+
+3. A short explanation in a field called "reason" to justify your classification.
+
+Base your analysis on:
+
+- The media's filename, extension, URL domain, and structure
+- Any visible or implied context in the description or metadata
+- Common patterns associated with harmful or explicit content (e.g. misleading thumbnails, file names like "leak", "private", etc.)
+- Presence of known tracking or clickbait structures
+- Signals of manipulation, propaganda, or doctored media
+- Educational, artistic, or humorous value if applicable
+
+Be strict in classifying anything suspicious or harmful. Assume your output may inform content moderation systems.
 `.trim();
 }
