@@ -1,4 +1,4 @@
-# Mostr
+# Modstr
 
 Smart Moderation for the Nostr Protocol.
 
@@ -63,9 +63,8 @@ npm install
 
 * [ ] Language detection integration
 * [ ] Local model support (e.g., Ollama, Llama.cpp)
-* [ ] NIP-75 moderation guidelines
-* [ ] Real-time webhook + relay middleware
-* [ ] DVM
+* [ ] NIP-90 data vending machine integration
+* [ ] Websocket interface integration
 
 ---
 

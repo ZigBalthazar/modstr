@@ -4,86 +4,70 @@ import { ServiceResponse } from "@/common/models/serviceResponse";
 import { logger } from "@/server";
 import { generateText, type LanguageModelV1 } from "ai";
 import { google } from "@ai-sdk/google";
-
-function createClassificationPrompt(eventContent: string, tags: string[] = []): string {
-	const tagText = tags.length > 0 ? `\n\nTags: ${tags.join(", ")}` : "";
-
-	return `
-You are an AI classifier for Nostr events. Your task is to analyze the following event and return:
-
-1. A "status" from this fixed list:
-[
-  "SAFE",
-  "WARNING",
-  "HARMFUL"
-]
-
-2. One or more "labels" from this fixed list:
-[
-  "OK",
-  "INFORMATIVE",
-  "FRIENDLY",
-  "OFFENSIVE",
-  "SPAM",
-  "MISLEADING",
-  "SENSITIVE",
-  "PROFANITY",
-  "HATEFUL",
-  "VIOLENT",
-  "SEXUAL",
-  "SELF_HARM",
-  "DANGEROUS",
-  "NSFW",
-  "AI_GENERATED",
-  "UNVERIFIED",
-  "LANGUAGE_UNKNOWN"
-]
-
-3. A short explanation in "reason".
-
-Event Text:
-\`\`\`
-${eventContent}${tagText}
-\`\`\`
-
-Expected Output Format:
-\`\`\`json
-{
-  "status": "SAFE" | "WARNING" | "HARMFUL",
-  "labels": ["OK", "INFORMATIVE"],
-  "reason": "Short explanation of the classification"
-}
-\`\`\`
-`.trim();
-}
+import { Event, verifyEvent } from "nostr-tools";
+import { AnalyzeEventResponse } from "./analyzeModel";
+import { ClassificationLabel, ClassificationStatus } from "./enums";
+import { createClassificationPrompt } from "./promptService";
+import { cleanMarkdownText } from "@/utils";
 
 export class AnalyzeService {
-	private model: LanguageModelV1;
+  private model: LanguageModelV1;
 
-	constructor() {
-		this.model = google("gemini-2.0-flash-001");
-	}
+  constructor() {
+    this.model = google("gemini-2.0-flash-001", {
+      structuredOutputs: true,
+    });
+  }
 
-	async analyze(content: string, tags: string[][]): Promise<ServiceResponse<string | null>> {
-		try {
-			const message = createClassificationPrompt(content, tags.flat());
-			const { text } = await generateText({
-				model: this.model,
-				prompt: message,
-				maxSteps: 2,
-			});
+  private async analyze(
+    content: string
+  ): Promise<{ status: ClassificationStatus; labels: ClassificationLabel[]; reason: string }> {
+    const message = createClassificationPrompt(content);
+    const { text } = await generateText({
+      model: this.model,
+      prompt: message,
+      maxSteps: 1,
+	  maxTokens: 1000,
+	  temperature: 0.2,
+	  topP: 0.8,
+    });
 
-			return ServiceResponse.success("Classification generated successfully.", text, StatusCodes.OK);
-		} catch (ex) {
-			const errorMessage = `Error generate message : $${(ex as Error).message}`;
-			logger.error(errorMessage);
-			return ServiceResponse.failure(
-				"An error occurred while generating message.",
-				null,
-				StatusCodes.INTERNAL_SERVER_ERROR,
-			);
-		}
-	}
+    // Clean up the text before parsing to JSON
+    let cleanedText = cleanMarkdownText(text);
+
+    return JSON.parse(cleanedText);
+  }
+
+  async analyzeEvent(event: Event): Promise<ServiceResponse<AnalyzeEventResponse | null>> {
+    try {
+      const isGood = verifyEvent(event);
+      if (!isGood) {
+        return ServiceResponse.failure("Invalid event format.", null, StatusCodes.BAD_REQUEST);
+      }
+
+      const tagText = event.tags.length > 0 ? `\n\nTags: ${event.tags.join(", ")}` : "";
+      const contentAndTags = `${event.content}${tagText}`;
+
+      const analyzeResponse = await this.analyze(contentAndTags);
+
+      const result = {
+        event_id: event.id,
+        status: analyzeResponse.status,
+        labels: analyzeResponse.labels,
+        reason: analyzeResponse.reason,
+      };
+
+      return ServiceResponse.success("Classification generated successfully.", result, StatusCodes.OK);
+    } catch (ex) {
+      const errorMessage = `Error generate message : ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure(
+        "An error occurred while generating message.",
+        null,
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 }
 
 export const analyzeService = new AnalyzeService();

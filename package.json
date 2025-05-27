@@ -25,6 +25,7 @@
 		"ai": "^4.3.16",
 		"cors": "2.8.5",
 		"dotenv": "^16.5.0",
+		"ejs": "^3.1.10",
 		"express": "5.1.0",
 		"express-rate-limit": "7.5.0",
 		"helmet": "8.1.0",
@@ -53,9 +54,14 @@
 		"vitest": "3.1.4"
 	},
 	"tsup": {
-		"entry": ["src/index.ts"],
+		"entry": [
+			"src/index.ts"
+		],
 		"outDir": "dist",
-		"format": ["esm", "cjs"],
+		"format": [
+			"esm",
+			"cjs"
+		],
 		"target": "es2020",
 		"sourcemap": true,
 		"clean": true,

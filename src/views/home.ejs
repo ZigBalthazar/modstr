@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= Name %></title>
+  <link rel="icon" href="<%= Icon %>" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+    body {
+      font-family: "Inter", sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-[#3b3a3d] to-[#7b5e57] text-white flex flex-col min-h-screen">
+
+  <main class="flex-grow flex items-center justify-center p-6">
+    <div class="w-full max-w-2xl">
+      <div class="text-center mb-10">
+        <img src="<%= Icon %>" alt="Icon" class="w-24 h-24 mx-auto mb-4" />
+        <h1 class="text-4xl font-bold text-[#e4c59e]"><%= Name %></h1>
+        <p class="text-gray-300 mt-2"><%= Description %></p>
+      </div>
+
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+        <h2 class="text-2xl font-semibold text-[#e4c59e] mb-4">Contact Information</h2>
+        <ul class="space-y-2">
+          <li><span class="font-semibold">Email:</span> <a href="mailto:<%= Email %>" class="text-[#e4c59e] hover:underline"><%= Email %></a></li>
+          <li><span class="font-semibold">PubKey:</span> <a href="nostr:<%= PubKey %>" class="text-[#e4c59e] hover:underline">Operator Nostr</a></li>
+          <li><span class="font-semibold">Docs:</span> <a href="<%= DocsURL %>" class="text-[#e4c59e] hover:underline">Documentation</a></li>
+        </ul>
+      </div>
+
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-[#e4c59e] mb-4">Service Details</h2>
+        <ul class="space-y-2">
+          <li><span class="font-semibold">Service Name:</span> <%= ServiceName || 'N/A' %></li>
+          <li><span class="font-semibold">Version:</span> <%= Version %></li>
+          <li><span class="font-semibold">Supported NIPs:</span> <%= SupportedNIPs || 'N/A' %></li>
+          <li><span class="font-semibold">Source Code:</span> <a href="<%= RepoURL %>" class="text-[#e4c59e] hover:underline">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-gray-900 text-center py-6">
+    <p class="text-gray-400">
+      Use a <a href="https://github.com/aljazceru/awesome-nostr#clients" class="text-[#e4c59e] underline hover:text-[#7b5e57]">Nostr client</a> to interact with the service.
+    </p>
+  </footer>
+</body>
+</html>

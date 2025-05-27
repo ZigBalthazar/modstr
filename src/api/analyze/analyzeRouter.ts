@@ -9,8 +9,6 @@ import { analyzeController } from "./analyzeController";
 export const analyzeRegistry = new OpenAPIRegistry();
 export const analyzeRouter: Router = express.Router();
 
-// chatRegistry.register("Chat", ChatSchema);
-
 analyzeRegistry.registerPath({
 	method: "post",
 	path: "/analyze",
