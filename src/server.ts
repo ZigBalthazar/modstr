@@ -2,7 +2,7 @@ import cors from "cors";
 import express, { type Express } from "express";
 import helmet from "helmet";
 import { pino } from "pino";
-import path from "path";
+import path from "node:path";
 import { name, version, repository, description } from "../package.json";
 
 import { openAPIRouter } from "@/api-docs/openAPIRouter";
@@ -32,27 +32,23 @@ app.use(requestLogger);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com");
-  next();
-});
-
 // Routes
 app.use("/static", express.static(path.join(__dirname, "views", "assets")));
 
 app.get("/", (req, res) => {
-  res.render("home", {
-    Name: name,
-    Icon: "/static/icon.png",
-    Description: description,
-    Email: "hi@dezh.tech",
-    PubKey: "npub1...",
-    DocsURL: "https://docs.dezh.tech/docs/category/modstr",
-    ServiceName: "",
-    Version: version,
-    SupportedNIPs: "",
-    RepoURL: repository,
-  });
+	res.setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com");
+	res.render("home", {
+		Name: name,
+		Icon: "/static/icon.png",
+		Description: description,
+		Email: "hi@dezh.tech",
+		PubKey: "npub1...",
+		DocsURL: "https://docs.dezh.tech/docs/category/modstr",
+		ServiceName: "",
+		Version: version,
+		SupportedNIPs: "",
+		RepoURL: repository,
+	});
 });
 app.use("/health-check", healthCheckRouter);
 app.use("/analyze", analyzeRouter);
