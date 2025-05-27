@@ -25,6 +25,8 @@ Analyze the event for:
 - Misinformation or manipulative content (especially financial or health-related)
 - Signs of impersonation or social engineering
 - Any violation of known community or platform norms
+- Presence of tracking links (e.g., URLs with "utm_*", "si" parameters, suspicious redirects, click-tracking domains like bit.ly, lnk.to, t.co) and label as tracking
+
 
 Be strict, consistent, and assume your response will trigger moderation or alerting mechanisms.
 

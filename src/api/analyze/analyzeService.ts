@@ -43,9 +43,7 @@ export class AnalyzeService {
 			const tagText = event.tags.length > 0 ? `\n\nTags: ${event.tags.join(", ")}` : "";
 			const contentAndTags = `${event.content}${tagText}`;
 
-			const analyzeResponse = await this.analyze(`
-Get free tokens free tokens free tokens http://free-tokens-claim.com get free tokens
-`);
+			const analyzeResponse = await this.analyze(contentAndTags);
 
 			const result = {
 				event_id: event.id,
